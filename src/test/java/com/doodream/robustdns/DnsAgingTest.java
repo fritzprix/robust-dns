@@ -15,7 +15,7 @@ public class DnsAgingTest {
             "8.8.4.4",
             "1.1.1.1",
             "205.251.198.30",
-            "168.126.63.1"
+            "168.126.63.1"   // Ill performing DNS (KT Main DNS address)
     };
 
     private final RobustDnsResolver resolver;
@@ -27,12 +27,7 @@ public class DnsAgingTest {
 
     public DnsAgingTest() throws Exception {
         resolver = RobustDnsResolver.builder()
-                .failoverDns(
-                        "168.126.63.1",
-                        "8.8.8.8",
-                        "8.8.4.4",
-                        "1.1.1.1"
-                )
+                .failoverDns(CREDIBLE_DNS_ADDRESS)
                 .cache(true)
                 .timeout(10L, TimeUnit.SECONDS)
                 .build();

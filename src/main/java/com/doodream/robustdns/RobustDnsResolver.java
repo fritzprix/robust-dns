@@ -134,7 +134,6 @@ public class RobustDnsResolver {
 
                         if(records != null) {
                             if(records.length == 0) {
-                                emitter.onError(new UnknownHostException(String.format(Locale.ENGLISH, "%s is unreachable", name)));
                                 return;
                             }
                             try {
