@@ -161,6 +161,6 @@ public class RobustDnsResolver {
                     }
                 });
             }
-        }).subscribeOn(Schedulers.io());
+        }).timeout(10L, TimeUnit.SECONDS).subscribeOn(Schedulers.io());
     }
 }
