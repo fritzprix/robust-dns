@@ -2,11 +2,13 @@ package com.doodream.robustdns;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import org.xbill.DNS.*;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,7 @@ public class RobustDnsResolver {
 
     private final ConcurrentHashMap<String, DnsRecord> cache = new ConcurrentHashMap<>();
     private boolean cacheEnabled;
+    private final CompositeDisposable disposable = new CompositeDisposable();
     private Resolver[] rsv;
 
     public static class Builder {
@@ -157,7 +160,27 @@ public class RobustDnsResolver {
 
                     @Override
                     public void handleException(Object o, Exception e) {
-                        emitter.onError(e);
+                        if(e instanceof PortUnreachableException) {
+                            disposable.add(Observable.just(name)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(unresolved -> {
+                                        try {
+                                            final InetAddress resolved = Address.getByName(name);
+                                            DnsRecord record = new DnsRecord(
+                                                    resolved,
+                                                    System.currentTimeMillis() + cacheTimeoutInMills
+                                            );
+                                            if (cacheEnabled) {
+                                                cache.put(name, record);
+                                            }
+                                            emitter.onSuccess(resolved);
+                                        } catch (UnknownHostException uke) {
+                                            emitter.onError(uke);
+                                        }
+                                    }));
+                        } else {
+                            emitter.onError(e);
+                        }
                     }
                 });
             }
