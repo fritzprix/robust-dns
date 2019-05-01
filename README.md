@@ -3,8 +3,8 @@
  
 ## Problem Statement 
 > DNS setting on user's environment can cause huge impact on overall user experience. some ill performing DNS are still 
-widely configured general user environment. (there are a lot of articles like [here](https://blog.naver.com/star-com/221481249044) recommending change DNS server address to ill performing one). 
-as a widely adopted solution for problem is client side DNS caching which can relieve the situation though, there is a trade-off with security issues relating to DNS exploit (e.g. DNS Spoof)
+widely configured general user environment. (there are a lot of articles like [here](https://blog.naver.com/star-com/221481249044), recommending DNS server configuration update to ill performing one). 
+Most widely adopted solution for problem is client side DNS caching with optimal cache time considering typical use case, which can relieve the situation though, there is a trade-off with security issues relating to DNS exploit (e.g. DNS Spoof)
 so just extending caching duration is not optimal solution for the problem. 
 
  
@@ -30,8 +30,8 @@ so KT DNS is chosen to configure test environment. it shows decent response time
 A test program performs DNS resolution by calling InetAddress::getByName() which is considered a system default implementation of DNS resolution, while other test program uses the POC implementation. Both of them perform DNS resolution trial given interval (which is 15 min.)  
  
 ## Test Result 
-> Test performed with 80 reps which takes almost 20 hours. there was 1 DNS failure observed with system default resolver while no failure at all for POC resolver.
-regarding measured response time, the measured time varies quite dynamically for default resolver (min : 10 msec ~ max : 15 second), while it doesn't for POC resolver (min 28 msec ~ max : 518 msec).
+> Test are performed with 80 reps for each case which takes almost 20 hours parallel. there was 1 DNS failure observed with system default resolver while no failure is observed at all for POC resolver throughout the test.
+Regarding measured response time, the measured time varies quite dynamically for default resolver (min : 10 msec ~ max : 15 second), while it doesn't for POC resolver (min 28 msec ~ max : 518 msec).
 moreover, the response time becomes very close to zero when the 'update cache on expire' is activated showing response time (min : 0 msec ~ max : 271 msec). note that the maximum response time in last case is for first DNS query which is essentially missed in local DNS cache.
 the measured averages are 803.8, 118.3, 4.68 msec correspondingly.
 - case 1 : InetAddress.getByName()
