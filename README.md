@@ -67,7 +67,7 @@ allprojects {
 ```groovy
 dependencies {
 ...
-    implementation 'com.doodream:robust-dns:1.0.0'
+    implementation 'com.doodream:robust-dns:1.0.1'
     implementation 'dnsjava:dnsjava:2.1.8'
 ...
 }
