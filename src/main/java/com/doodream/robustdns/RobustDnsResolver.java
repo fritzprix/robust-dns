@@ -185,7 +185,11 @@ public class RobustDnsResolver {
                                     }));
                             return;
                         }
-                        e.printStackTrace();
+                        try {
+                            emitter.onSuccess(InetAddress.getByName(name));
+                        } catch (UnknownHostException ue) {
+                            emitter.onError(ue);
+                        }
                     }
                 });
             }
