@@ -121,9 +121,15 @@ public class RobustDnsResolver {
                 cache.remove(name);
                 if(updateOnExpire) {
                     resolve(name).subscribe();
+                    return Single.just(record.address);
+                } else {
+                    return resolve(name);
                 }
             }
             return Single.just(record.address);
+        }
+        if(name == null || name.isEmpty()) {
+            return Single.error(new UnknownHostException("invalid hostname : empty"));
         }
         return Single.<InetAddress>create(emitter -> {
             final Record question = Record.newRecord(Name.concatenate(Name.fromString(name), Name.root), Type.A, DClass.IN, TTL.MAX_VALUE);
@@ -174,12 +180,16 @@ public class RobustDnsResolver {
                                                 cache.put(name, record);
                                             }
                                             emitter.onSuccess(resolved);
-                                        } catch (UnknownHostException uke) {
-                                            emitter.onError(uke);
+                                        } catch (Exception uke) {
+                                            // emitter.onError(uke);
                                         }
                                     }));
-                        } else {
-                            emitter.onError(e);
+                            return;
+                        }
+                        try {
+                            emitter.onSuccess(InetAddress.getByName(name));
+                        } catch (UnknownHostException ue) {
+                            emitter.onError(ue);
                         }
                     }
                 });
