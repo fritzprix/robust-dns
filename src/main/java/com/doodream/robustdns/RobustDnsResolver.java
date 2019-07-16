@@ -117,7 +117,7 @@ public class RobustDnsResolver {
     public Single<InetAddress> resolve(String name) {
         if(cache.containsKey(name)) {
             final DnsRecord record = cache.get(name);
-            if(record.expireAt < System.currentTimeMillis()) {
+            if(record.expireAt > System.currentTimeMillis()) {
                 cache.remove(name);
                 if(updateOnExpire) {
                     resolve(name).subscribe();
@@ -126,6 +126,7 @@ public class RobustDnsResolver {
                     return resolve(name);
                 }
             }
+            return Single.just(record.address);
         }
         if(name == null || name.isEmpty()) {
             return Single.error(new UnknownHostException("invalid hostname : empty"));
