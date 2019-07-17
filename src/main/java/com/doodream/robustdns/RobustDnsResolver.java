@@ -136,6 +136,7 @@ public class RobustDnsResolver {
             final Message query = Message.newQuery(question);
 
             for (Resolver resolver : rsv) {
+                resolver.setTimeout(10);
                 resolver.sendAsync(query, new ResolverListener() {
                     @Override
                     public void receiveMessage(Object o, Message message) {
