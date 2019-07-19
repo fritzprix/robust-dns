@@ -117,7 +117,8 @@ public class RobustDnsResolver {
     public Single<InetAddress> resolve(String name) {
         if(cache.containsKey(name)) {
             final DnsRecord record = cache.get(name);
-            if(record.expireAt > System.currentTimeMillis()) {
+            if(record.expireAt < System.currentTimeMillis()) {
+                System.out.println("cache miss");
                 cache.remove(name);
                 if(updateOnExpire) {
                     resolve(name).subscribe();
