@@ -48,6 +48,6 @@ public class DnsAgingTest {
 
     @Test(timeout = 5000L)
     public void test_lookup() throws Exception {
-        System.out.println(resolver.resolve("www.google.com").blockingGet());
+        System.out.println(resolver.resolve("www.google.com").blockingGet().getAddress());
     }
 }

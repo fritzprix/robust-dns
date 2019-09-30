@@ -6,7 +6,7 @@
 
     <groupId>com.doodream</groupId>
     <artifactId>robust-dns</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
 
@@ -64,7 +64,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-<!--    https://github.com/fritzprix/robust-dns.git-->
     <build>
         <extensions>
             <extension>
