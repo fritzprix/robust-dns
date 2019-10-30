@@ -13,8 +13,8 @@ so just extending caching duration is not optimal solution for the problem.
 - Sending DNS Queries to multiple DNS Servers concurrently
 > By sending concurrent queries to multiple DNS servers (for example, default DNS server and a few well-known public DNS servers) and accepting response which arrives first, DNS response is guaranteed within certain boundary of time while minimizing 
 risk of DNS request failure  
-- Update Cache record on expiration
-> Not just extending cache duration, but by updating the DNS record when it's expired, most DNS queries are guaranteed to be handled by local DNS caches while reducing risk of DNS cache poisoning attack. 
+- Asynchronous refresh on cache expiration
+> Not just extending cache duration, but by updating the DNS record when it's expired (responding with stale result first), most DNS queries are guaranteed to be handled by local DNS caches while reducing risk of DNS cache poisoning attack. 
 
 ## Test Method 
 > One of ill performing DNS server in Korea is KT(Korea Telecom) DNS server whose IP address is 168.126.63.1, which is also one of the widely used DNS server. 
@@ -67,7 +67,7 @@ allprojects {
 ```groovy
 dependencies {
 ...
-    implementation 'com.doodream:robust-dns:1.0.1'
+    implementation 'com.doodream:robust-dns:1.0.3'
     implementation 'dnsjava:dnsjava:2.1.8'
 ...
 }
