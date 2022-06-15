@@ -52,7 +52,7 @@
         <rxjava_version>2.1.12</rxjava_version>
         <lombok_version>1.16.6</lombok_version>
         <slf4j_version>1.7.25</slf4j_version>
-        <gson_version>2.8.5</gson_version>
+        <gson_version>2.8.9</gson_version>
         <maven.repository>maven_repository</maven.repository>
         <github.global.server>github</github.global.server>
     </properties>
